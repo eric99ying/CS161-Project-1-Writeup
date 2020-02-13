@@ -194,7 +194,7 @@ Using gdb, we determined that the address of the jmp \*esp instruction in code w
 
 The stored return address was at address `0xbfcd9adc`, and buf was at `0xbfcd9ab0`. Thus, we needed to pad buf by `0xbfcd9adc` - `0xbfcd9ab0` = 44 bytes.  
 
-3)
+#### GDB Exploit
 
 64 bytes above buf before attack:
 
