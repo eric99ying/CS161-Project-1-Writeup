@@ -1,9 +1,11 @@
 
 # Project 1 Write Up
 
+
 ---
 
-## Problem 2: Smith
+
+### Problem 2: smith
 
 1) 
 
@@ -83,7 +85,7 @@ Notice that `0xbffff6dc` contains the modified return address, pointing to 4 byt
 ---
 
 
-## Problem 3: jz
+### Problem 3: jz
 
 1) 
 
@@ -111,7 +113,7 @@ The address of the stored return address was `0xbffff710`. Our modified return a
 ---
 
 
-## Problem 4: brown
+### Problem 4: brown
 
 1)
 
@@ -155,7 +157,7 @@ Notice that the 65th byte was changed. Address `0xbffff658` points to an address
 ---
 
 
-## Problem 5: oracle
+### Problem 5: oracle
 
 1)
 
@@ -180,7 +182,7 @@ Thus, we appended 21 dummy characters (accounting for 1 more byte in buf), added
 
 ---
 
-## Problem 6: jones
+### Problem 6: jones
 
 1) 
 
