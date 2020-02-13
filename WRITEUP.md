@@ -7,7 +7,7 @@
 
 ### Problem 2: smith
 
-1) 
+##### Main Idea
 
 We feed in an arbitrary file that performs a buffer overflow attack. The vulnerability is that the agent-smith doesn't check if the file passed in is safe or not.
 
