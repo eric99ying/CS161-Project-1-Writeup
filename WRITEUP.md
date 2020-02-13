@@ -7,7 +7,7 @@
 
 ### Problem 2: smith
 
-##### Main Idea
+#### Main Idea
 
 We feed in an arbitrary file that performs a buffer overflow attack. The vulnerability is that the agent-smith doesn't check if the file passed in is safe or not.
 
@@ -15,7 +15,7 @@ The first 4 bytes of our file is an integer specifying the size of the rest of t
 
 
 
-2)
+#### Magic Numbers 
 
 It was determined that the stored eip was 148 bytes after msg. Thus, we needed to add 148 bytes of padding into the buffer first.
 
@@ -35,7 +35,7 @@ Stack level 0, frame at 0xbffff6e0:
 ```
 
 
-3)
+#### GDB Exploit
 
 64 words above msg before attack:
 
@@ -87,15 +87,14 @@ Notice that `0xbffff6dc` contains the modified return address, pointing to 4 byt
 
 ### Problem 3: jz
 
-1) 
+#### Main Idea
 
 The vulnerability lies in the fact that the canary value can be found through the printf statement in `dehexify`. Specifically, the while loop in `dehexify` will automatically increment `i` by 3 if it encounters the '\\' and 'x' next to one another. Therefore, it is possible to skip over the null terminator character inside of `c.buffer` if "\\x" is placed right before the null termination character. Using this approach, the while loop inside of `dehexify` will continue parsing bytes after the null termination character, eventually storing the value of the stack canary inside of `c.answer`. The printf statement will then print out `c.answer`, revealing the stack canary. 
 
 Once we have the canary value, we use the same buffer overflow attack as in problems 1 and 2, making sure to replace the stack canary with the leaked canary value. 
 
 
-
-2) 
+#### Magic Numbers 
 
 In order to retrieve the canary value, we needed to add the "\\x" characters 2 bytes before where the stack canary lies. Specifically, we padded the string by 12 bytes, inserted "\\" and "x", and then ended the string. Once the while loop encountered "\\x", it would skip to the stack canary in the next iteration. 
 
@@ -105,7 +104,7 @@ The address of the stored return address was `0xbffff710`. Our modified return a
 
 
 
-3)
+#### GDB Exploit
 
 ![Gdb exploit](https://github.com/eric99ying/CS161-Project-1-Writeup/blob/master/buffer_1.jpg)
 
@@ -115,13 +114,14 @@ The address of the stored return address was `0xbffff710`. Our modified return a
 
 ### Problem 4: brown
 
-1)
+#### Main Idea
 
 The program contains an off by one vulnerability. In the for loop in `flip`, the program iterates through 65 indices of the buffer, when the buffer is only 64 bytes large. 
 
 We store our shellcode inside of the environment variables. We then inject the address of our shellcode (inside of the environment variables) 8 bytes into the buffer. We pad the rest of buffer. We take advantage of the off by one vulnerability to modify the stored sfp value above buf to point to the 4 bytes into buf. This is possible because we only need to change the least significant byte of the previous return address to point into the buffer. From there, the program will pick up the return address inside of the buffer and start executing the shellcode in the environment variable. 
 
-2)
+
+#### Magic Numbers 
 
 Inside of `buf`, we needed 8 bytes of padding, 4 bytes for the modified return address pointing to the shellcode, 52 bytes more padding, and 1 overflowed extra byte that causes the ebp to point back to `buf`. 
 
@@ -129,7 +129,7 @@ It was determined through gdb that the address of buf was `0xbffff650`. Thus, th
 
 The modified return address inside of buf needed to point to where the shellcode resided inside of the environment variables. Through gdb, it was determined that the shellcode was at address `0xbfffff97`.
 
-3)
+#### GDB Exploit
 
 68 bytes in buf before attack:
 
@@ -159,14 +159,14 @@ Notice that the 65th byte was changed. Address `0xbffff658` points to an address
 
 ### Problem 5: oracle
 
-1)
+#### Main Idea
 
 The vulnerability in this program lies in the fact that the size checking occurs before the file is actually read. Therefore, we can dynamically change the file (by adding more bytes) after the the file initially passed the size check. This would allow us to introduce a buffer overflow attack similar to problem 2. 
 
 In the attack, we modify the stored return address to point to 4 bytes above where it is stored. The shellcode is then placed above the stored return address. 
 
 
-2)
+#### Magic Numbers 
 
 We filled the file "hack" initially with 127 dummy characters to pass the size check. 
 
@@ -175,7 +175,7 @@ The stored eip was at address `0xbffff6fc`. Our buf was at `0xbffff6e8`. Our mod
 Thus, we appended 21 dummy characters (accounting for 1 more byte in buf), added 4 bytes of the modified return address, and then added our 85 bytes of shellcode. In total, after the appending of our buffer overflow attack bytes, the total file size became 127 + 21 + 4 + 85 = 237 bytes. We made sure to tell the program to read 237 bytes from the file "hack". 
 
 
-3)
+#### GDB Exploit
 
 ![Gdb exploit](https://github.com/eric99ying/CS161-Project-1-Writeup/blob/master/buffer_2.jpg)
 
@@ -184,11 +184,11 @@ Thus, we appended 21 dummy characters (accounting for 1 more byte in buf), added
 
 ### Problem 6: jones
 
-1) 
+#### Main Idea
 
 We use a ret2esp attack to bypass the ASLR and introduce our shellcode. We first find a jmp \*esp instruction in the program, which conveniently exists in the `magic` function. We then overflow the return address from handle to point to the jmp \*esp instruction. We then add our shellcode right above the return address. From there, the jmp \*esp will cause our instruction pointer to point to where the stack pointer is, which is at the beginning of our shellcode.  
 
-2) 
+#### Magic Numbers 
 
 Using gdb, we determined that the address of the jmp \*esp instruction in code was at `0x8048666`. Our modified return address would need to be `0x8048666`.
 
