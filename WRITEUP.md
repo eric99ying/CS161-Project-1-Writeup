@@ -104,6 +104,8 @@ The address of the stored return address was 0xbffff710. Our modified return add
 
 3)
 
+[Gdb exploit](https://github.com/eric99ying/CS161-Project-1-Writeup/blob/master/buffer_1.jpg)
+
 
 ---
 
@@ -172,10 +174,7 @@ Thus, we appended 21 dummy characters (accounting for 1 more byte in buf), added
 
 3)
 
-Layout of stack before attack:
-
-
-Layout of stack after attack:
+[Gdb exploit](https://github.com/eric99ying/CS161-Project-1-Writeup/blob/master/buffer_2.jpg
 
 
 ---
